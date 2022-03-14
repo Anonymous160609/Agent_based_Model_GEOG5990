@@ -1,3 +1,4 @@
+import sys 
 import requests#webscrewler for initial coordinates of agents
 import bs4#structuralize the screwlered for use
 import tkinter#indepedent interface for animation
@@ -9,9 +10,16 @@ import matplotlib.pyplot#plots environment and agents in tkinter interface
 import csv#read in environment
 import time#timing the codes
 import agentframework#agent class encasulated
+import sherphedframe
 from environment import environment
 import importlib#reload agentframework after adjustment
-importlib.reload(agentframework)#reload agentframework after adjustment
+importlib.reload(agentframework)#reload agentframework after adjustment#
+importlib.reload(sherphedframe)
+
+print("sys.argv for python module name:", sys.argv[0])
+print("Argument List: 1.python module: 2.number_of_agents; number_of_iterations; radious_of_neighbourhood", str(sys.argv))
+print("Number of elements excluding the name of the program:",(len(sys.argv)-1))
+
 
 start = time.process_time()#start timing 
 
@@ -37,10 +45,14 @@ for row in dataset:
 '''
     
 #agents scales 
-num_of_agents = 10
-num_of_iterations = 40
+num_of_agents = 50
+#num_of_agents = sys.argv[1]
+num_of_iterations = 30
+#num_of_iterations = sys.argv[2]
 agents = []
+sherphed = []
 neighbourhood = 20
+#neighbourhood =sys.argv[3]
 colours = []
 
 #colours of agents
@@ -48,17 +60,58 @@ colours.append('White')
 colours.append('Black')
 colours.append('Brown')
 
+colr = ('blue')
+corp = ('red')
+
 #size of the tkinter interface 
 fig = matplotlib.pyplot.figure(figsize=(7, 7))
 ax = fig.add_axes([0, 0, 1, 1])
+
+
 
 #make agents
 for i in range(num_of_agents):
     y = int(td_ys[i].text)
     x = int(td_xs[i].text)
     j = i%len(colours)
-    print(j)
     agents.append(agentframework.Agent(y,x,environment,agents,colours[j]))
+    
+sherphed.append(sherphedframe.Shepherd(0,0,colr,random.randint(0, 1),random.randint(0, 1)))
+
+'''
+def drift(a,b):
+    if (((a._x - b._x)**2) + ((a._y - b._y)**2))**0.5 < 20:
+        if b._acc_y>0:
+            if a._y >b._y:
+                a._y = int(a._y)
+            else:
+                a._y = int(b._y - 2)
+        
+        if b._acc_y<0:
+            if a._y >b._y:
+                a._y = int(b._y - 2)
+            else:
+                a._y = int(a._y)                     
+            
+        if b._acc_x>0:
+            if a._x >b._x:
+                a._y = int(a._x)
+            else:
+                a._x = int(b._x - 2)
+        
+        if b._acc_x<0:
+            if a._x >b._x:
+                a._x = int(a._x - 2)
+            else:
+                a._x = int(b._x)         
+        b._acc_y=random.randint(0,1)
+        b._acc_x=random.randint(0,1)
+'''
+
+def prey(a,b):
+    if (((a._x - b._x)**2) + ((a._y - b._y)**2))**0.5 < 5:
+        a.colour = 'red'
+
 
 #???
 carry_on = True	
@@ -66,11 +119,17 @@ carry_on = True
 #animation for move agents for "certain" times
 def update(frame_number):    
     fig.clear()   
+    
     for i in range(num_of_agents):
-        random.shuffle(agents)
-        agents[i].move()
+        random.shuffle(agents)       
         agents[i].eat()
         agents[i].share_with_neighbours(neighbourhood)
+        sherphed[0].move()
+        #drift(agents[i], sherphed[0])
+        prey(agents[i], sherphed[0])
+        agents[i].move()
+
+
             
     if random.random() < 0.1:#10% chances of stop in every round of agent movement
         carry_on = False
@@ -79,6 +138,7 @@ def update(frame_number):
     matplotlib.pyplot.xlim(0, 99)
     matplotlib.pyplot.ylim(0, 99)
     matplotlib.pyplot.imshow(environment)
+    matplotlib.pyplot.scatter(sherphed[0]._y,sherphed[0]._x,color=sherphed[0].colour)
     for i in range(num_of_agents):
         matplotlib.pyplot.scatter(agents[i]._y,agents[i]._x,color=agents[i].colour)
 
@@ -111,5 +171,3 @@ model_menu.add_command(label="Run model", command=run)  #command=run: run onclic
 
 tkinter.mainloop() # Wait for interactions. 
 
-print(agents[4])
-agents[4]

@@ -1,13 +1,23 @@
 import random
 
 class Agent():
-    def __init__ (self,_y,_x,environment,agents):          
-        self._y=_y
-        self._x=_x
+    def __init__ (self,_y,_x,environment,agents, colour):
+        
+        if (_y == None):
+            self._y = random.randint(0,100)
+        else:
+            self._y =_y          
+        if (_x == None):
+            self._x = random.randint(0,100)
+        else:
+            self._x =_x 
+        
+        #self._y =_y          
+        #self._x =_x 
         self.environment = environment
         self.agents = agents
-        self.store = 0
-
+        self.store = 0 #grass eaten 
+        self.colour = colour
     def getx(self):
         return self._x
 
@@ -31,19 +41,20 @@ class Agent():
     y = property(gety, sety, dely, "I am the 'y' property.")
     
     def move(self):
-        if random.random() < 0.5:
-            self._y = (self._y + 1) % 100
-        else: 
-            self._y = (self._y - 1) % 100
-            
-        if random.random() < 0.5:
-            self._x = (self._x + 1) % 100
-        else: 
-            self._x = (self._x - 1) % 100
+        if self.colour != 'red':
+            if random.random() < 0.5:
+                self._y = (self._y + 1) % 100
+            else: 
+                self._y = (self._y - 1) % 100
+                
+            if random.random() < 0.5:
+                self._x = (self._x + 1) % 100
+            else: 
+                self._x = (self._x - 1) % 100
 
     def eat(self): # can you make it eat what is left?
-        if self.environment[self._y][self._x] > 10:
-            self.environment[self._y][self._x] -= 10
+        if self.environment[self._x][self._y] > 10:
+            self.environment[self._x][self._y] -= 10
             self.store += 10 
             
     #define distance function
@@ -64,7 +75,15 @@ class Agent():
                     ave = sum /2
                     self.store = ave
                     agent.store = ave
-                    #print("sharing " + str(dist) + " " + str(ave))
+                    #print("sharing " + str(dist) + " " + str(ave)
+                    
+    def __str__(self):
+        return str(self.store) and hex(id(self))
+        return (hex(id(self))) 
+
+        #return (str(self._y))
+        #return str(self.store)
+
 
     
     
