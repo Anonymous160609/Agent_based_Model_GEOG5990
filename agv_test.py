@@ -109,7 +109,7 @@ def drift(a,b):
 '''
 
 def prey(a,b):
-    if (((a._x - b._x)**2) + ((a._y - b._y)**2))**0.5 < 5:
+    if (((a._x - b._x)**2) + ((a._y - b._y)**2))**0.5 < 20:
         a.colour = 'red'
 
 
