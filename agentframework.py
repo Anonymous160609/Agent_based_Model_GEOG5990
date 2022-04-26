@@ -1,4 +1,9 @@
-import random
+# Class module for agent-based Model of sheep and wolf.
+# Called by main file: model.py.
+# Author: Anonymous160609 (Github).
+# Version: 10.3.
+
+import random # geenrate random numbers
 
 class Agent():
     """
@@ -97,7 +102,7 @@ class Agent():
         >>>agent.gety
         1
         
-        Print the vlaue of class attribute: y coordinate
+        print the vlaue of class attribute: y coordinate
         
         returns:
         the value of y
@@ -122,33 +127,59 @@ class Agent():
     y = property(gety, sety, "I am the 'y' property.")
     
     def move(self):
+        """
+        >>>agent = agentframwork.Agent(1,1,environment,agents,colour)
+        >>>a = agent.x
+        >>>agent.move
+        >>>b = agent.x
+        >>>a - b != 0
+        True
+        
+        movement method of sheep
+        
+        arguments: 
+        x: x coordinate of sheep
+        y: y coordinate of sheep
+        
+        Returns: 
+        changes in values of x and y coordinates 
+        """
+        # conditional clause to detect sheep corps, only living sheep can move
         if self.colour != 'Red':
+            # 50% change to move up
             if random.random() < 0.5:
-                #self._y = (self._y + 1) % 100
                 self._y = self._y + random.randint(1,10)
+                # if run into fence, turn around
                 if self._y > 254:
                     self._y = 254
+            # 50% change to move down
             else: 
-                #self._y = (self._y - 1) % 100
+
                 self._y = self._y - random.randint(1,10)
                 if self._y < 1:
                     self._y = 1
                 
             if random.random() < 0.5:
-                #self._x = (self._x + 1) % 100
+
                 self._x = self._x + random.randint(1,10)
                 if self._x > 254:
                     self._x = 254
             else: 
-                #self._x = (self._x - 1) % 100
+
                 self._x = self._x - random.randint(1,10)
                 if self._x < 1:
                     self._x = 1
+        # if corps, avoid moving
         else: 
             self._y = self._y
             self._x = self._x
-
-
+            
+                # old movement on theoritical physics coordinates
+                #self._y = (self._y - 1) % 100
+                #self._y = (self._y + 1) % 100
+                #self._x = (self._x - 1) % 100
+                #self._x = (self._x + 1) % 100
+                
     def eat(self): # can you make it eat what is left?
         """
         >>>agent = agentframework.Agent(x,y,11,agents,colour)
@@ -195,7 +226,26 @@ class Agent():
         
         return (((self._x - agent._x)**2) + ((self._y - agent._y)**2))**0.5 
 
-    def share_with_neighbours(self,neighbourhood):        
+    def share_with_neighbours(self,neighbourhood):
+        """
+        >>>agent1 = agentframework.Agent(1,1,environment,agents,colour)
+        >>>agent2 = agentframework.Agent(2,2,environment,agent1,colour)
+        >>>agent1.store = 30
+        >>>agent2.store = 10
+        >>>agent1.share_with_neighbours
+        >>>agent1.store
+        20
+        
+        share grass consumed with other sheep nearby
+        
+        arguments:
+        x: x coordinates of multiple sheep
+        y: y coordinates of multiple sheep
+        store: grass consumed by sheep
+        
+        returns: 
+        change and average of consumed grass in each sheep
+        """       
         for agent in self.agents:
                 random.shuffle(self.agents)
                 dist = self.distance_between(agent) 
@@ -205,8 +255,19 @@ class Agent():
                     self.store = ave
                     agent.store = ave
                     #print("sharing " + str(dist) + " " + str(ave)
-                    
+                
     def __str__(self):
+        """
+        >>>agent = agentframework.Agent(x,y,environment,agents,colour)
+        >>>agent.store = 20
+        >>>print(agent)
+        20
+        
+        override printed string describing the agent 
+        
+        argument:
+        string conten
+        """
         return str(self.store)
         #return str(self.store) and hex(id(self))
 
@@ -312,6 +373,23 @@ class Wolf():
     y = property(gety, sety, "I am the 'y' property.")
     
     def move(self):
+        """
+        >>>wolf = agentframwork.Wolf(1,1,colour)
+        >>>a = wolf.x
+        >>>wolf.move
+        >>>b = wolf.x
+        >>>a - b != 0
+        True
+        
+        movement method of wolf
+        
+        arguments: 
+        x: x coordinate of wolf
+        y: y coordinate of wolf
+        
+        Returns: 
+        changes in values of x and y coordinates 
+        """
         if random.random() > 0.5:
             self._y = (self._y + 1) % 100
         else: 

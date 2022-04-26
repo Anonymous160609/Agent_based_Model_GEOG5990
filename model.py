@@ -1,5 +1,6 @@
-# Agent-based Model for sheep and wolf agents.
-# Author: Anonymous0609(Github).
+# Agent-based Model for interactions between agents of sheep and wolf, 
+# and environment of grassland.
+# Author: Anonymous160609 (Github).
 # Version: 10.3.
 
 
@@ -57,9 +58,9 @@ td_xs = soup.find_all(attrs={"class" : "x"})
 
 # 3.1.   
 # agents scales 
-num_of_agents = 50
+num_of_agents = 99
 num_of_iterations = 50
-chance_of_stop = 0.1
+chance_of_stop = 0.01
 
 # 3.2.
 # lists for sheep and wolf agents
@@ -79,11 +80,13 @@ colr = ('Blue')  # wolf colour
 corp = ('Red')  # sheep corps colour
 
 # 3.4.
-# grass consumed by sheeps, for monitering ABM in tkinter
+# grass consumed by sheeps and their corps, for monitering ABM in tkinter
 grass = 0
 corps = 0
 
 # 3.5. 
+# fixed list of random numbers
+random.seed(160609)
 # like a switch of the ABM, ABM stops if it is turned to "False"
 carry_on = True	
 # timing for code excution
@@ -117,7 +120,7 @@ for i in range(num_of_agents):
     agents.append(agentframework.Agent(y,x,environment,agents,colours[j]))
 # make wolf, positionally pass its random initial locations,
 # to its built-in class attributes    
-wolf.append(agentframework.Wolf(0,0,colr))
+wolf.append(agentframework.Wolf(100,0,colr))
 
 
 # 5. 
